@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found · Avinash Kumar K. M.</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+  <style>
+    .error-wrap {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .error-code {
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 20vw, 12rem);
+      font-weight: 700;
+      color: var(--ivory-dark);
+      line-height: 1;
+      margin-bottom: 0;
+      user-select: none;
+    }
+    .error-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin: 8px 0 16px;
+    }
+    .error-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 420px;
+      margin-bottom: 36px;
+    }
+    .error-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+  <span class="nav-brand">Avinash Kumar K. M.</span>
+  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="publications.html">Publications</a>
+    <a href="experience.html">Experience</a>
+    <div class="nav-dropdown">
+      <button class="dropdown-toggle">Tools</button>
+      <div class="dropdown-menu">
+        <a href="viewer.html">🔬 3D Model Viewer</a>
+        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+      </div>
+    </div>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<main>
+  <div class="error-wrap">
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page not found</h1>
+    <p class="error-desc">This page doesn't exist — or was moved. Try navigating from the links below, or head back home.</p>
+    <div class="error-links">
+      <a href="index.html" class="btn btn-primary">Go Home</a>
+      <a href="research.html" class="btn btn-outline">Research</a>
+      <a href="viewer.html" class="btn btn-outline">3D Viewer</a>
+      <a href="contact.html" class="btn btn-outline">Contact</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Avinash Kumar K. M.</p>
+      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.querySelector('.menu-toggle');
+    const links  = document.querySelector('.nav-links');
+    if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+    document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        btn.closest('.nav-dropdown').classList.toggle('open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    });
+  });
+</script>
+</body>
+</html>

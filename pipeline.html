@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipeline — Avinash Kumar K. M.</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+  <meta name="description" content="From CT scan to 3D print — an interactive walkthrough of the reconstruction pipeline." />
+  <style>
+    /* ── Pipeline page specific ── */
+    .pipeline-intro {
+      max-width: 680px;
+      margin-bottom: 60px;
+    }
+
+    /* Progress rail */
+    .pipeline-rail {
+      position: fixed;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      z-index: 100;
+    }
+    @media (max-width: 900px) { .pipeline-rail { display: none; } }
+
+    .rail-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .rail-dot.active { border-color: var(--amber); background: var(--amber); }
+    .rail-dot::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .rail-dot:hover::after { opacity: 1; }
+    .rail-connector {
+      width: 2px;
+      height: 48px;
+      background: var(--border);
+    }
+    .rail-connector.filled { background: var(--amber); }
+
+    /* Stage cards */
+    .stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      min-height: 85vh;
+      padding: 60px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .stage.visible { opacity: 1; transform: translateY(0); }
+    .stage:last-child { border-bottom: none; }
+    .stage:nth-child(even) .stage-text { order: 2; }
+    .stage:nth-child(even) .stage-visual { order: 1; }
+
+    @media (max-width: 768px) {
+      .stage { grid-template-columns: 1fr; min-height: auto; padding: 40px 0; }
+      .stage:nth-child(even) .stage-text { order: 1; }
+      .stage:nth-child(even) .stage-visual { order: 2; }
+    }
+
+    .stage-number {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--ivory-dark);
+      line-height: 1;
+      margin-bottom: -16px;
+      user-select: none;
+    }
+
+    .stage-text h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .stage-text p { color: var(--slate); font-size: 0.95rem; margin-bottom: 10px; }
+
+    .stage-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--ivory-dark);
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .stage-visual {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: var(--navy);
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stage-visual img {
+      width: 100%;
+      height: 340px;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+      padding: 12px;
+    }
+
+    /* Placeholder for stages without images yet */
+    .stage-placeholder {
+      width: 100%;
+      height: 340px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 32px;
+      text-align: center;
+    }
+    .stage-placeholder .ph-icon { font-size: 3rem; }
+    .stage-placeholder .ph-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .stage-placeholder .ph-hint {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Key metrics */
+    .metrics {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .metric {
+      background: var(--ivory-dark);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--amber);
+    }
+    .metric-val { font-family: var(--font-mono); font-weight: 600; color: var(--navy); font-size: 1rem; }
+    .metric-label { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Summary strip */
+    .pipeline-summary {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 24px;
+      text-align: center;
+    }
+    .summary-item .si-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .summary-item .si-label { font-size: 0.82rem; color: rgba(255,255,255,0.55); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+  <span class="nav-brand">Avinash Kumar K. M.</span>
+  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="publications.html">Publications</a>
+    <a href="experience.html">Experience</a>
+    <div class="nav-dropdown">
+      <button class="dropdown-toggle">Tools</button>
+      <div class="dropdown-menu">
+        <a href="viewer.html">🔬 3D Model Viewer</a>
+        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+      </div>
+    </div>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- Sidebar rail -->
+<nav class="pipeline-rail" aria-label="Pipeline stages">
+  <div class="rail-dot active" data-label="Acquisition" data-target="stage-1"></div>
+  <div class="rail-connector" id="rc-1"></div>
+  <div class="rail-dot" data-label="Segmentation" data-target="stage-2"></div>
+  <div class="rail-connector" id="rc-2"></div>
+  <div class="rail-dot" data-label="Reconstruction" data-target="stage-3"></div>
+  <div class="rail-connector" id="rc-3"></div>
+  <div class="rail-dot" data-label="Smoothing" data-target="stage-4"></div>
+  <div class="rail-connector" id="rc-4"></div>
+  <div class="rail-dot" data-label="Analysis" data-target="stage-5"></div>
+  <div class="rail-connector" id="rc-5"></div>
+  <div class="rail-dot" data-label="3D Print" data-target="stage-6"></div>
+</nav>
+
+<main class="container" style="padding-left: 60px;">
+
+  <div class="pipeline-intro">
+    <p class="label-mono">Research Pipeline</p>
+    <h1 class="page-title">From CT Scan to 3D Model</h1>
+    <p style="color:var(--text-muted);font-size:1rem;">A step-by-step walkthrough of how a raw medical scan becomes a validated 3D mesh — the core of my doctoral research. Scroll to follow the pipeline.</p>
+    <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+      <a href="viewer.html" class="btn btn-primary">🔬 Interact with the 3D models</a>
+      <a href="research.html" class="btn btn-outline">Read the research</a>
+    </div>
+  </div>
+
+  <!-- Stage 1: Acquisition -->
+  <div class="stage visible" id="stage-1">
+    <div class="stage-text">
+      <div class="stage-number">01</div>
+      <span class="stage-tag">Acquisition</span>
+      <h2>Image Acquisition</h2>
+      <p>The pipeline begins with a CT or micro-CT scan. The output is a stack of 2D grayscale slices — a DICOM or NIfTI volume — where each voxel encodes a Hounsfield unit corresponding to tissue density.</p>
+      <p>Scan quality, resolution, and slice thickness are the first sources of error. Everything downstream inherits these constraints.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">μCT</div><div class="metric-label">Scanner type</div></div>
+        <div class="metric"><div class="metric-val">DICOM</div><div class="metric-label">Format</div></div>
+        <div class="metric"><div class="metric-val">~50μm</div><div class="metric-label">Typical resolution</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/01_imaging.png" alt="CT / micro-CT image acquisition" />
+    </div>
+  </div>
+
+  <!-- Stage 2: Segmentation -->
+  <div class="stage" id="stage-2">
+    <div class="stage-text">
+      <div class="stage-number">02</div>
+      <span class="stage-tag">Segmentation</span>
+      <h2>Image Segmentation</h2>
+      <p>The target structure is isolated from surrounding tissue using intensity thresholding, region growing, or learned classifiers. The output is a binary mask — voxels labelled as structure or background.</p>
+      <p>Class imbalance (structure voxels are a small fraction of the total volume) significantly affects Dice, Jaccard, and Hausdorff metrics. This was a central finding of our phantom-based study.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">Dice</div><div class="metric-label">Accuracy metric</div></div>
+        <div class="metric"><div class="metric-val">Hausdorff</div><div class="metric-label">Surface distance</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/02_segmentation.png" alt="Image segmentation — binary mask" />
+    </div>
+  </div>
+
+  <!-- Stage 3: Reconstruction -->
+  <div class="stage" id="stage-3">
+    <div class="stage-text">
+      <div class="stage-number">03</div>
+      <span class="stage-tag">Reconstruction</span>
+      <h2>Marching Cubes Reconstruction</h2>
+      <p>The Marching Cubes algorithm converts the binary voxel mask into a triangulated surface mesh. Each voxel cube is classified by which of its 8 corners lie inside the object, and a lookup table determines the triangle configuration.</p>
+      <p>The result is a watertight mesh — but one carrying staircase artefacts proportional to voxel size. The statistical distribution of these surface deviations across 9 geometries is the subject of our submitted journal paper.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">256³</div><div class="metric-label">Typical voxel grid</div></div>
+        <div class="metric"><div class="metric-val">Gen. γ</div><div class="metric-label">Best-fit error dist.</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/03_mesh.png" alt="Marching Cubes reconstructed mesh" />
+    </div>
+  </div>
+
+  <!-- Stage 4: Smoothing -->
+  <div class="stage" id="stage-4">
+    <div class="stage-text">
+      <div class="stage-number">04</div>
+      <span class="stage-tag">Post-Processing</span>
+      <h2>Mesh Smoothing</h2>
+      <p>Laplacian smoothing iteratively repositions each vertex toward the centroid of its neighbours, reducing jaggedness. But over-smoothing erodes clinically relevant features — thin vessel walls, bifurcations, small-scale morphology.</p>
+      <p>A spectral stopping criterion was established using the Laplace-Beltrami eigenvalue spectrum to determine the iteration count at which smoothing transitions from beneficial to destructive.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">L-B</div><div class="metric-label">Eigenvalue spectrum</div></div>
+        <div class="metric"><div class="metric-val">λ scaling</div><div class="metric-label">Stopping criterion</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/04_smoothedMesh.png" alt="Mesh after Laplacian smoothing" />
+    </div>
+  </div>
+
+  <!-- Stage 5: Morphological Analysis -->
+  <div class="stage" id="stage-5">
+    <div class="stage-text">
+      <div class="stage-number">05</div>
+      <span class="stage-tag">Analysis</span>
+      <h2>Morphological Analysis</h2>
+      <p>Once a clean mesh is available, structural properties are extracted — branch lengths, diameters, tortuosity, bifurcation angles. Skeletonisation reduces the 3D volume to a 1D graph representing the topology.</p>
+      <p>A PyQt desktop application was developed for batch morphological analysis of vascular networks and root systems.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">PyQt</div><div class="metric-label">Desktop app</div></div>
+        <div class="metric"><div class="metric-val">Graph</div><div class="metric-label">Topology output</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/06_morphAnalysis.png" alt="Morphological analysis — skeletonisation" />
+    </div>
+  </div>
+
+  <!-- Stage 6: 3D Printing -->
+  <div class="stage" id="stage-6">
+    <div class="stage-text">
+      <div class="stage-number">06</div>
+      <span class="stage-tag">Fabrication</span>
+      <h2>3D Printing & Validation</h2>
+      <p>The validated STL is printed on a Formlabs Form 3+ SLA printer (BioM3D Lab). Flexible materials with Shore hardness as low as 80A allow fabrication of anatomically compliant vessels.</p>
+      <p>Printed phantoms are re-scanned and compared back to the original geometry — closing the loop and quantifying the cumulative error of the full pipeline.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">SLA</div><div class="metric-label">Process</div></div>
+        <div class="metric"><div class="metric-val">80A</div><div class="metric-label">Shore hardness</div></div>
+        <div class="metric"><div class="metric-val">25μm</div><div class="metric-label">Layer resolution</div></div>
+      </div>
+    </div>
+    <div class="stage-visual">
+      <img src="images/05_3DPrintedModel.png" alt="3D printed model" />
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="pipeline-summary">
+    <div class="summary-item"><div class="si-num">6</div><div class="si-label">Pipeline Stages</div></div>
+    <div class="summary-item"><div class="si-num">9</div><div class="si-label">Geometries Studied</div></div>
+    <div class="summary-item"><div class="si-num">3</div><div class="si-label">Phantom Types</div></div>
+    <div class="summary-item"><div class="si-num">2</div><div class="si-label">Papers Submitted</div></div>
+  </div>
+
+  <div style="text-align:center;margin-top:48px;">
+    <a href="viewer.html" class="btn btn-primary" style="margin-right:12px;">🔬 View 3D Models</a>
+    <a href="publications.html" class="btn btn-outline">Read the Papers</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Avinash Kumar K. M.</p>
+      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+</footer>
+
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+
+<script>
+function placeholderHTML(icon, path, hint) {
+  return `<div class="stage-placeholder"><div class="ph-icon">${icon}</div><div class="ph-label">${path}</div><div class="ph-hint">${hint}</div></div>`;
+}
+
+// Scroll-driven stage reveal
+const stages = document.querySelectorAll('.stage');
+const dots   = document.querySelectorAll('.rail-dot');
+const connectors = document.querySelectorAll('.rail-connector');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Update rail
+      const idx = Array.from(stages).indexOf(entry.target);
+      dots.forEach((d, i) => d.classList.toggle('active', i <= idx));
+      connectors.forEach((c, i) => c.classList.toggle('filled', i < idx));
+    }
+  });
+}, { threshold: 0.3 });
+
+stages.forEach(s => observer.observe(s));
+
+// Rail dot click → scroll to stage
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
+
+// Nav
+document.addEventListener('DOMContentLoaded', function () {
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    if (link.getAttribute('href') === path) link.classList.add('active');
+  });
+  const toggle = document.querySelector('.menu-toggle');
+  const links  = document.querySelector('.nav-links');
+  if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+  const topBtn = document.querySelector('.back-to-top');
+  if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
+});
+</script>
+</body>
+</html>

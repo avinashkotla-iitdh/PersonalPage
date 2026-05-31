@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Viewer — Avinash Kumar K. M.</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+  <meta name="description" content="Interactive 3D model viewer — research meshes from medical image reconstruction." />
+  <style>
+    .viewer-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      margin-top: 32px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .viewer-layout { grid-template-columns: 1fr; }
+    }
+
+    .model-selector { display: flex; flex-direction: column; gap: 10px; }
+
+    .model-btn {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+    }
+    .model-btn:hover { border-color: var(--navy); }
+    .model-btn.active { border-color: var(--amber); background: #fff8ee; }
+    .model-btn .model-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--navy);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .model-btn .model-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    #viewer-canvas-wrap {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4/3;
+      box-shadow: var(--shadow-lg);
+    }
+
+    #viewer-canvas-wrap canvas { width: 100% !important; height: 100% !important; display: block; }
+
+    #loader-msg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.7);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .viewer-controls {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      color: var(--slate);
+      transition: all var(--transition);
+    }
+    .ctrl-btn:hover { border-color: var(--navy); color: var(--navy); }
+    .ctrl-btn.toggled { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    .viewer-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 10px;
+    }
+
+    .model-info-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-top: 14px;
+    }
+    .model-info-panel h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .model-info-panel p { font-size: 0.88rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+  <span class="nav-brand">Avinash Kumar K. M.</span>
+  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="publications.html">Publications</a>
+    <a href="experience.html">Experience</a>
+    <div class="nav-dropdown">
+      <button class="dropdown-toggle">Tools</button>
+      <div class="dropdown-menu">
+        <a href="viewer.html">🔬 3D Model Viewer</a>
+        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+      </div>
+    </div>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div style="margin-bottom:8px;">
+    <p class="label-mono">Interactive</p>
+    <h1 class="page-title">3D Model Viewer</h1>
+    <p class="page-subtitle">Real meshes from my research — reconstructed from medical and micro-CT scans. Drag to rotate · Scroll to zoom · Right-drag to pan.</p>
+  </div>
+
+  <div class="viewer-layout">
+
+    <!-- Sidebar: model list -->
+    <aside>
+      <p class="label-mono" style="margin-bottom:10px;">Select Model</p>
+      <div class="model-selector" id="modelSelector">
+        <!-- Buttons injected by JS from MODELS array -->
+      </div>
+      <div class="model-info-panel" id="modelInfo">
+        <h3 id="infoTitle">—</h3>
+        <p id="infoDesc">Select a model to view details.</p>
+      </div>
+    </aside>
+
+    <!-- Main viewer -->
+    <div>
+      <div id="viewer-canvas-wrap">
+        <div id="loader-msg">
+          <div class="spinner"></div>
+          <span id="loader-text">Select a model to begin</span>
+        </div>
+      </div>
+
+      <div class="viewer-controls">
+        <button class="ctrl-btn" id="btnWireframe">Wireframe</button>
+        <button class="ctrl-btn" id="btnFlat">Flat Shading</button>
+        <button class="ctrl-btn" id="btnReset">Reset View</button>
+      </div>
+      <p class="viewer-hint">Drag · Scroll · Right-drag &nbsp;|&nbsp; All models are research outputs from BioM3D Lab, IIT Dharwad.</p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Avinash Kumar K. M.</p>
+      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+</footer>
+
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+
+<!-- Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Model registry — ADD YOUR FILES HERE ──────────────────────────────────────
+// Place .stl files in the meshes/ folder and add entries below.
+const MODELS = [
+  {
+    id: 'artery',
+    label: 'Coronary Artery',
+    desc: 'Reconstructed from micro-CT data. Marching Cubes reconstruction followed by Laplacian smoothing. Used in surface deviation and error assessment studies.',
+    file: 'meshes/artery.stl',
+    color: 0xe07070
+  },
+  {
+    id: 'femur',
+    label: 'Femur',
+    desc: 'Femur segmented from clinical CT data. Co-supervised BTech project on morphological analysis of the femoral geometry.',
+    file: 'meshes/femur.stl',
+    color: 0xd4b483
+  },
+  {
+    id: 'stanfordBunny',
+    label: 'Stanford Bunny',
+    desc: 'Classic benchmarking geometry used in mesh smoothing and reconstruction accuracy validation studies.',
+    file: 'meshes/stanfordBunny.stl',
+    color: 0x7090cc
+  }
+];
+// ──────────────────────────────────────────────────────────────────────────────
+
+// Three.js scene setup
+const wrap   = document.getElementById('viewer-canvas-wrap');
+const loader = document.getElementById('loader-msg');
+const loaderTxt = document.getElementById('loader-text');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x0f1f3d, 1);
+wrap.appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
+camera.position.set(0, 0, 3);
+
+// Lights
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
+const dirA = new THREE.DirectionalLight(0xffffff, 0.9);
+dirA.position.set(1, 2, 3);
+scene.add(dirA);
+const dirB = new THREE.DirectionalLight(0xd4870a, 0.3);
+dirB.position.set(-2, -1, -1);
+scene.add(dirB);
+
+let currentMesh = null;
+let wireframeOn  = false;
+let flatOn       = false;
+
+// Simple OrbitControls substitute
+let isDragging = false, isRightDrag = false;
+let prevX = 0, prevY = 0;
+const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+const panOffset = new THREE.Vector3();
+let zoomDist = 3;
+
+renderer.domElement.addEventListener('mousedown', e => {
+  isDragging = true;
+  isRightDrag = e.button === 2;
+  prevX = e.clientX; prevY = e.clientY;
+});
+window.addEventListener('mouseup', () => { isDragging = false; });
+window.addEventListener('mousemove', e => {
+  if (!isDragging || !currentMesh) return;
+  const dx = e.clientX - prevX, dy = e.clientY - prevY;
+  prevX = e.clientX; prevY = e.clientY;
+  if (isRightDrag) {
+    panOffset.x -= dx * 0.004;
+    panOffset.y += dy * 0.004;
+  } else {
+    euler.y += dx * 0.008;
+    euler.x += dy * 0.008;
+    currentMesh.rotation.copy(euler);
+  }
+});
+renderer.domElement.addEventListener('wheel', e => {
+  zoomDist = Math.max(0.3, Math.min(20, zoomDist + e.deltaY * 0.005));
+}, { passive: true });
+renderer.domElement.addEventListener('contextmenu', e => e.preventDefault());
+
+// Touch support
+let lastTouch = null;
+renderer.domElement.addEventListener('touchstart', e => { lastTouch = e.touches[0]; }, { passive: true });
+renderer.domElement.addEventListener('touchmove', e => {
+  if (!currentMesh || !lastTouch) return;
+  const t = e.touches[0];
+  const dx = t.clientX - lastTouch.clientX, dy = t.clientY - lastTouch.clientY;
+  euler.y += dx * 0.008; euler.x += dy * 0.008;
+  currentMesh.rotation.copy(euler);
+  lastTouch = t;
+}, { passive: true });
+
+function resizeRenderer() {
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resizeRenderer);
+resizeRenderer();
+
+let autoRotate = true;
+function animate() {
+  requestAnimationFrame(animate);
+  if (autoRotate && currentMesh && !isDragging) {
+    euler.y += 0.004;
+    currentMesh.rotation.copy(euler);
+  }
+  camera.position.set(panOffset.x, panOffset.y, zoomDist);
+  renderer.render(scene, camera);
+}
+animate();
+
+// Stop auto-rotate on user interaction, resume after 3s idle
+renderer.domElement.addEventListener('mousedown', () => { autoRotate = false; });
+let resumeTimer;
+window.addEventListener('mouseup', () => {
+  clearTimeout(resumeTimer);
+  resumeTimer = setTimeout(() => { autoRotate = true; }, 3000);
+});
+
+// STL loader (minimal, handles ASCII and binary)
+function loadSTL(url, color, onDone, onErr) {
+  fetch(url)
+    .then(r => { if (!r.ok) throw new Error('Not found'); return r.arrayBuffer(); })
+    .then(buf => {
+      let geo;
+      const text = new TextDecoder().decode(new Uint8Array(buf, 0, 80));
+      if (text.trimStart().startsWith('solid')) {
+        geo = parseSTLAscii(new TextDecoder().decode(buf));
+      } else {
+        geo = parseSTLBinary(buf);
+      }
+      geo.computeVertexNormals();
+      geo.center();
+      // Normalise scale
+      geo.computeBoundingBox();
+      const size = new THREE.Vector3();
+      geo.boundingBox.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const scale = 2.0 / maxDim;
+      geo.scale(scale, scale, scale);
+
+      const mat = new THREE.MeshPhongMaterial({ color, shininess: 60, side: THREE.DoubleSide });
+      const mesh = new THREE.Mesh(geo, mat);
+      onDone(mesh);
+    })
+    .catch(onErr);
+}
+
+function parseSTLBinary(buf) {
+  const view = new DataView(buf);
+  const nTri = view.getUint32(80, true);
+  const positions = new Float32Array(nTri * 9);
+  let offset = 84, pi = 0;
+  for (let i = 0; i < nTri; i++) {
+    offset += 12; // skip normal
+    for (let v = 0; v < 3; v++) {
+      positions[pi++] = view.getFloat32(offset, true); offset += 4;
+      positions[pi++] = view.getFloat32(offset, true); offset += 4;
+      positions[pi++] = view.getFloat32(offset, true); offset += 4;
+    }
+    offset += 2;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  return geo;
+}
+
+function parseSTLAscii(text) {
+  const lines = text.split('\n');
+  const verts = [];
+  for (const line of lines) {
+    const t = line.trim();
+    if (t.startsWith('vertex')) {
+      const parts = t.split(/\s+/);
+      verts.push(parseFloat(parts[1]), parseFloat(parts[2]), parseFloat(parts[3]));
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(verts), 3));
+  return geo;
+}
+
+// Build sidebar buttons
+const selector = document.getElementById('modelSelector');
+MODELS.forEach(m => {
+  const btn = document.createElement('button');
+  btn.className = 'model-btn';
+  btn.dataset.id = m.id;
+  btn.innerHTML = `<span class="model-name">${m.label}</span><span class="model-desc">${m.file}</span>`;
+  btn.addEventListener('click', () => loadModel(m));
+  selector.appendChild(btn);
+});
+
+// Auto-load first model
+loadModel(MODELS[0]);
+
+function loadModel(model) {
+  // Update button states
+  document.querySelectorAll('.model-btn').forEach(b => b.classList.toggle('active', b.dataset.id === model.id));
+  document.getElementById('infoTitle').textContent = model.label;
+  document.getElementById('infoDesc').textContent  = model.desc;
+
+  // Remove old mesh
+  if (currentMesh) { scene.remove(currentMesh); currentMesh.geometry.dispose(); currentMesh = null; }
+
+  // Reset controls
+  euler.set(0, 0, 0); panOffset.set(0, 0, 0); zoomDist = 3;
+  wireframeOn = false; flatOn = false;
+  document.getElementById('btnWireframe').classList.remove('toggled');
+  document.getElementById('btnFlat').classList.remove('toggled');
+
+  loader.style.display = 'flex';
+  loaderTxt.textContent = `Loading ${model.label}…`;
+
+  loadSTL(
+    model.file,
+    model.color,
+    mesh => {
+      currentMesh = mesh;
+      scene.add(mesh);
+      loader.style.display = 'none';
+    },
+    err => {
+      loaderTxt.textContent = `Could not load ${model.file} — check the meshes/ folder.`;
+      console.error(err);
+    }
+  );
+}
+
+// Control buttons
+document.getElementById('btnWireframe').addEventListener('click', function () {
+  if (!currentMesh) return;
+  wireframeOn = !wireframeOn;
+  currentMesh.material.wireframe = wireframeOn;
+  this.classList.toggle('toggled', wireframeOn);
+});
+
+document.getElementById('btnFlat').addEventListener('click', function () {
+  if (!currentMesh) return;
+  flatOn = !flatOn;
+  currentMesh.material.flatShading = flatOn;
+  currentMesh.material.needsUpdate = true;
+  this.classList.toggle('toggled', flatOn);
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  euler.set(0, 0, 0);
+  panOffset.set(0, 0, 0);
+  zoomDist = 3;
+  if (currentMesh) currentMesh.rotation.copy(euler);
+});
+
+// Nav
+document.addEventListener('DOMContentLoaded', function () {
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    if (link.getAttribute('href') === path) link.classList.add('active');
+  });
+  const toggle = document.querySelector('.menu-toggle');
+  const links  = document.querySelector('.nav-links');
+  if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+  const topBtn = document.querySelector('.back-to-top');
+  if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Avinash Kumar K. M.</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+  <meta name="description" content="Gallery — conferences, posters, and presentations by Avinash Kumar K. M." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Avinash Kumar K. M. — Research Portfolio" />
+  <meta property="og:description" content="PhD Scholar at IIT Dharwad | 3D Modeling | Biomechanics | CAD | Research" />
+  <meta property="og:image" content="images/profilePhoto.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://avinashkm.netlify.app" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+  <span class="nav-brand">Avinash Kumar K. M.</span>
+  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="publications.html">Publications</a>
+    <a href="experience.html">Experience</a>
+    <div class="nav-dropdown">
+      <button class="dropdown-toggle">Tools</button>
+      <div class="dropdown-menu">
+        <a href="viewer.html">🔬 3D Model Viewer</a>
+        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+      </div>
+    </div>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div data-aos="fade-up" style="margin-bottom:40px;">
+    <p class="label-mono">Conferences & Events</p>
+    <h1 class="page-title">Gallery</h1>
+    <p class="page-subtitle">Presentations, posters, and milestones.</p>
+  </div>
+
+  <div class="gallery-grid" data-aos="fade-up">
+    <div class="gallery-card">
+      <a data-lightbox="gallery" href="images/anrfConclave.png">
+        <img alt="ANRF Conclave" src="images/anrfConclave.png" />
+      </a>
+      <p><strong>ANRF-INAE Conclave 2025</strong> — Won the 2nd Best Poster Award in the Indigenous Technologies Development theme. Topic: "Error assessment in image-based 3D reconstruction and 3D printing."</p>
+    </div>
+
+    <div class="gallery-card">
+      <a data-lightbox="gallery" href="images/ieeePoster.png">
+        <img alt="IEEE Poster" src="images/ieeePoster.png" />
+      </a>
+      <p><strong>IEEE ICEI 2024</strong> — Presented a poster and delivered a talk on transfer-learning based multi-class areca nut image classification, at the IEEE Conference on Engineering Informatics jointly organised by IIT Dharwad, KLE Tech, and IIIT Dharwad.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;" data-aos="fade-up">
+    <div class="three-column-row">
+      <div class="gallery-card esb-small">
+        <a data-lightbox="gallery" href="images/esb_1.jpg">
+          <img alt="ESB 2025 — Image 1" src="images/esb_1.jpg" />
+        </a>
+      </div>
+      <div class="gallery-card esb-large">
+        <a data-lightbox="gallery" href="images/esb_2.png">
+          <img alt="ESB 2025 — Image 2" src="images/esb_2.png" />
+        </a>
+      </div>
+      <div class="gallery-card esb-small">
+        <a data-lightbox="gallery" href="images/esb_3.jpg">
+          <img alt="ESB 2025 — Image 3" src="images/esb_3.jpg" />
+        </a>
+      </div>
+    </div>
+    <p style="margin-top:14px;font-size:0.88rem;color:var(--text-muted);text-align:center;">
+      <strong>ESB 2025</strong> — Presented "Error assessment in image-based 3D reconstruction and 3D printing" at the 30th Congress of European Society of Biomechanics, organised by ETH Zurich, Switzerland · 06–09 July 2025.
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Avinash Kumar K. M.</p>
+      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+</footer>
+
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer onerror="document.querySelectorAll('[data-aos]').forEach(el=>el.style.opacity=1)"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js" defer></script>
+<script>
+  window.addEventListener('load', () => { if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 }); });
+  document.addEventListener('DOMContentLoaded', function () {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      if (link.getAttribute('href') === path) link.classList.add('active');
+    });
+    const toggle = document.querySelector('.menu-toggle');
+    const links  = document.querySelector('.nav-links');
+    if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+    // Mobile dropdown toggle
+    document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        btn.closest('.nav-dropdown').classList.toggle('open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    });
+    const topBtn = document.querySelector('.back-to-top');
+    if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
+  });
+</script>
+</body>
+</html>
