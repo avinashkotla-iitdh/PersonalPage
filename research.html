@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Research — Avinash Kumar K. M.</title>
   <link href="style.css" rel="stylesheet" />
   <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
-  <meta name="description" content="Research work of Avinash Kumar K. M. — 3D reconstruction, mesh smoothing, morphological analysis, 3D printing." />
+  <meta name="description"
+    content="Research work of Avinash Kumar K. M. — 3D reconstruction, mesh smoothing, morphological analysis, 3D printing." />
   <meta name="robots" content="index, follow" />
   <meta property="og:title" content="Avinash Kumar K. M. — Research Portfolio" />
   <meta property="og:description" content="PhD Scholar at IIT Dharwad | 3D Modeling | Biomechanics | CAD | Research" />
@@ -16,192 +18,216 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
+
 <body>
 
-<nav aria-label="Main navigation">
-  <span class="nav-brand">Avinash Kumar K. M.</span>
-  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="research.html">Research</a>
-    <a href="publications.html">Publications</a>
-    <a href="experience.html">Experience</a>
-    <div class="nav-dropdown">
-      <button class="dropdown-toggle">Tools</button>
-      <div class="dropdown-menu">
-        <a href="viewer.html">🔬 3D Model Viewer</a>
-        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+  <nav aria-label="Main navigation">
+    <span class="nav-brand">Avinash Kumar K. M.</span>
+    <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="publications.html">Publications</a>
+      <a href="experience.html">Experience</a>
+      <div class="nav-dropdown">
+        <button class="dropdown-toggle">Tools</button>
+        <div class="dropdown-menu">
+          <a href="viewer.html">🔬 3D Model Viewer</a>
+          <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+        </div>
+      </div>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div data-aos="fade-up" style="margin-bottom:40px;">
+      <p class="label-mono">PhD Work · IIT Dharwad</p>
+      <h1 class="page-title">Research</h1>
+      <p class="page-subtitle">From medical scans to 3D geometry — the full pipeline.</p>
+      <a href="viewer.html" class="btn btn-primary">🔬 Interactive 3D Viewer →</a>
+      <a href="pipeline.html" class="btn btn-outline" style="margin-left:12px;">⚙️ Pipeline Walkthrough →</a>
+    </div>
+
+    <!-- 1. Medical Scans -->
+    <section class="section-research" data-aos="fade-up">
+      <h2>3D Model from Medical Scans</h2>
+      <div class="flex-two">
+        <div>
+          <p>Patient-specific implants and anatomical models reconstructed from medical scans enable clinical diagnosis,
+            treatment planning, surgical training, and computational modelling. Both physical 3D prints and virtual CAD
+            models are central to these applications.</p>
+          <p>My research involves generating three-dimensional geometric models from medical images, with implementation
+            of different segmentation techniques on scans derived from micro-CT machines.</p>
+          <p>The figure here illustrates the reconstruction pipeline applied to the roots of a chlorophyta plant, that
+            was scanned using a micro-CT scanner and recontructed using region growing segmentation algorithm and
+            printed using Form 3+ SLA 3D printer</p>
+        </div>
+        <div>
+          <a data-lightbox="gallery" href="images/processNew.png">
+            <img alt="Medical Scans pipeline" loading="lazy" src="images/processNew.png" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Light-based Scanners -->
+    <section class="section-research" data-aos="fade-up">
+      <h2>3D Model from Light-Based Scanners</h2>
+      <div class="flex-two">
+        <div>
+          <p>Light-based scanning allows non-invasive 3D capture of surface features for prosthetic design, digital
+            archiving, and reverse engineering. CAD models from structured light scans offer significant insight in
+            personalised product development and AI-based analysis.</p>
+        </div>
+        <div>
+          <a data-lightbox="gallery" href="images/scanModelPrint.png">
+            <img alt="Light-based Scanning" loading="lazy" src="images/scanModelPrint.png" />
+          </a>
+        </div>
+      </div>
+      <div class="flex-two" style="margin-top:24px;">
+        <div>
+          <video class="video-half" controls loading="lazy" title="Eva Scanning">
+            <source src="videos/evaScanning.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div>
+          <p>The image above shows the stages of structured light pattern-based reconstruction applied to a human face
+            model. The video demonstrates the use of the Artec Eva scanner, hosted at BioM3D lab, in scanning and
+            creating a geometric model of a human bust.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Mesh Smoothing -->
+    <section class="section-research" data-aos="fade-up">
+      <h2>Mesh Smoothing</h2>
+      <div class="flex-two">
+        <div>
+          <p>Mesh smoothing is a critical post-processing step applied to all tessellations. It removes staircase
+            artefacts and jaggedness introduced by imaging and hardware limitations, producing smooth continuous
+            geometries.</p>
+          <p>The trade-off: smoothing can inadvertently erode intricate features. A spectral stopping criterion using
+            the Laplace-Beltrami eigenvalue spectrum was developed to address this. The video demonstrates the effect of
+            Laplacian smoothing with a sufficient scaling factor on the geometry of a coronary artery.</p>
+        </div>
+        <div>
+          <video controls loading="lazy" style="border-radius:var(--radius-md);">
+            <source src="videos/0046v2.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Morphological Extraction -->
+    <section class="section-research" data-aos="fade-up">
+      <h2>Morphological Extraction</h2>
+      <div class="three-columns">
+        <div>
+          <p>Post-thresholding morphological filters (erosion, dilation, etc.) refine binary masks to extract features
+            like branching, length, and continuity from complex biological shapes such as plant roots and blood vessels.
+            A desktop PyQt-based application was built for batch morphological analysis of vascular networks.</p>
+        </div>
+        <div>
+          <h3>Skeletonize 2D</h3>
+          <a data-lightbox="gallery" href="images/skeletonizeMesh.png">
+            <img alt="Skeleton 2D - Will be implemented" loading="lazy" src="images/skeletonizeMesh.png" />
+          </a>
+          <a class="btn-action" href="https://skeleton2d.netlify.app" target="_blank" rel="noopener">Try Skeletonize
+            2D</a>
+        </div>
+        <div>
+          <h3>Skeletonize 3D</h3>
+          <a data-lightbox="gallery" href="images/skeletonizeMesh.png">
+            <img alt="Skeleton 3D - Will be implemented" loading="lazy" src="images/skeletonizeMesh.png" />
+          </a>
+          <a class="btn-action" href="https://skeleton3d.netlify.app" target="_blank" rel="noopener">Try Skeletonize
+            3D</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 3D Printing -->
+    <section class="section-research" data-aos="fade-up">
+      <h2>3D Printing</h2>
+      <div class="flex-two">
+        <div>
+          <p>Using STL models derived from imaging, prototypes are printed via SLA/FDM processes. 3D prints enable
+            physical validation, educational demonstrations, and pre-surgical rehearsals.</p>
+          <p>The image shows the Formlabs Form 3+ SLA 3D printing facility, along with washing and curing units at
+            BioM3D lab. The video shows printing of a flexible tube using a material with Shore hardness of 80A.</p>
+        </div>
+        <div>
+          <a data-lightbox="gallery" href="images/printing3Stages.png">
+            <img alt="3D Printing Stages" loading="lazy" src="images/printing3Stages.png" />
+          </a>
+        </div>
+      </div>
+      <div class="flex-two" style="margin-top:24px;">
+        <div>
+          <video class="video-half" controls loading="lazy">
+            <source src="videos/slaPrint.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div
+          style="background:var(--ivory-dark);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--text-muted);min-height:200px;font-size:0.9rem;padding:20px;text-align:center;">
+          Additional media will be added soon
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <p class="footer-name">Avinash Kumar K. M.</p>
+        <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+        <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+        <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+        <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
       </div>
     </div>
-    <a href="blog.html">Blog</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="contact.html">Contact</a>
-  </div>
-</nav>
+    <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+  </footer>
 
-<main class="container">
+  <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
 
-  <div data-aos="fade-up" style="margin-bottom:40px;">
-    <p class="label-mono">PhD Work · IIT Dharwad</p>
-    <h1 class="page-title">Research</h1>
-    <p class="page-subtitle">From medical scans to 3D geometry — the full pipeline.</p>
-    <a href="viewer.html" class="btn btn-primary">🔬 Interactive 3D Viewer →</a>
-    <a href="pipeline.html" class="btn btn-outline" style="margin-left:12px;">⚙️ Pipeline Walkthrough →</a>
-  </div>
-
-  <!-- 1. Medical Scans -->
-  <section class="section-research" data-aos="fade-up">
-    <h2>3D Model from Medical Scans</h2>
-    <div class="flex-two">
-      <div>
-        <p>Patient-specific implants and anatomical models reconstructed from medical scans enable clinical diagnosis, treatment planning, surgical training, and computational modelling. Both physical 3D prints and virtual CAD models are central to these applications.</p>
-        <p>My research involves generating three-dimensional geometric models from medical images, with implementation of different segmentation techniques on scans derived from micro-CT machines.</p>
-      </div>
-      <div>
-        <a data-lightbox="gallery" href="images/processNew.png">
-          <img alt="Medical Scans pipeline" loading="lazy" src="images/processNew.png" />
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. Light-based Scanners -->
-  <section class="section-research" data-aos="fade-up">
-    <h2>3D Model from Light-Based Scanners</h2>
-    <div class="flex-two">
-      <div>
-        <p>Light-based scanning allows non-invasive 3D capture of surface features for prosthetic design, digital archiving, and reverse engineering. CAD models from structured light scans offer significant insight in personalised product development and AI-based analysis.</p>
-      </div>
-      <div>
-        <a data-lightbox="gallery" href="images/scanModelPrint.png">
-          <img alt="Light-based Scanning" loading="lazy" src="images/scanModelPrint.png" />
-        </a>
-      </div>
-    </div>
-    <div class="flex-two" style="margin-top:24px;">
-      <div>
-        <video class="video-half" controls loading="lazy" title="Eva Scanning">
-          <source src="videos/evaScanning.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <div>
-        <p>The image above shows the stages of structured light pattern-based reconstruction applied to a human face model. The video demonstrates the use of the Artec Eva scanner, hosted at BioM3D lab, in scanning and creating a geometric model of a human bust.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Mesh Smoothing -->
-  <section class="section-research" data-aos="fade-up">
-    <h2>Mesh Smoothing</h2>
-    <div class="flex-two">
-      <div>
-        <p>Mesh smoothing is a critical post-processing step applied to all tessellations. It removes staircase artefacts and jaggedness introduced by imaging and hardware limitations, producing smooth continuous geometries.</p>
-        <p>The trade-off: smoothing can inadvertently erode intricate features. A spectral stopping criterion using the Laplace-Beltrami eigenvalue spectrum was developed to address this. The video demonstrates the effect of Laplacian smoothing with a sufficient scaling factor on the geometry of a coronary artery.</p>
-      </div>
-      <div>
-        <video controls loading="lazy" style="border-radius:var(--radius-md);">
-          <source src="videos/0046v2.mp4" type="video/mp4" />
-        </video>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Morphological Extraction -->
-  <section class="section-research" data-aos="fade-up">
-    <h2>Morphological Extraction</h2>
-    <div class="three-columns">
-      <div>
-        <p>Post-thresholding morphological filters (erosion, dilation, etc.) refine binary masks to extract features like branching, length, and continuity from complex biological shapes such as plant roots and blood vessels. A desktop PyQt-based application was built for batch morphological analysis of vascular networks.</p>
-      </div>
-      <div>
-        <h3>Skeletonize 2D</h3>
-        <a data-lightbox="gallery" href="images/skeletonizeMesh.png">
-          <img alt="Skeleton 2D" loading="lazy" src="images/skeletonizeMesh.png" />
-        </a>
-        <a class="btn-action" href="https://skeleton2d.netlify.app" target="_blank" rel="noopener">Try Skeletonize 2D</a>
-      </div>
-      <div>
-        <h3>Skeletonize 3D</h3>
-        <a data-lightbox="gallery" href="images/skeletonizeMesh.png">
-          <img alt="Skeleton 3D" loading="lazy" src="images/skeletonizeMesh.png" />
-        </a>
-        <a class="btn-action" href="https://skeleton3d.netlify.app" target="_blank" rel="noopener">Try Skeletonize 3D</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. 3D Printing -->
-  <section class="section-research" data-aos="fade-up">
-    <h2>3D Printing</h2>
-    <div class="flex-two">
-      <div>
-        <p>Using STL models derived from imaging, prototypes are printed via SLA/FDM processes. 3D prints enable physical validation, educational demonstrations, and pre-surgical rehearsals.</p>
-        <p>The image shows the Formlabs Form 3+ SLA 3D printing facility, along with washing and curing units at BioM3D lab. The video shows printing of a flexible tube using a material with Shore hardness of 80A.</p>
-      </div>
-      <div>
-        <a data-lightbox="gallery" href="images/printing3Stages.png">
-          <img alt="3D Printing Stages" loading="lazy" src="images/printing3Stages.png" />
-        </a>
-      </div>
-    </div>
-    <div class="flex-two" style="margin-top:24px;">
-      <div>
-        <video class="video-half" controls loading="lazy">
-          <source src="videos/slaPrint.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <div style="background:var(--ivory-dark);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--text-muted);min-height:200px;font-size:0.9rem;padding:20px;text-align:center;">
-        Additional media will be added soon
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <div>
-      <p class="footer-name">Avinash Kumar K. M.</p>
-      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
-    </div>
-    <div class="footer-links">
-      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
-      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
-      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
-      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
-    </div>
-  </div>
-  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
-</footer>
-
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer onerror="document.querySelectorAll('[data-aos]').forEach(el=>el.style.opacity=1)"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js" defer></script>
-<script>
-  window.addEventListener('load', () => { if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 }); });
-  document.addEventListener('DOMContentLoaded', function () {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      if (link.getAttribute('href') === path) link.classList.add('active');
-    });
-    const toggle = document.querySelector('.menu-toggle');
-    const links  = document.querySelector('.nav-links');
-    if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
-    // Mobile dropdown toggle
-    document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        btn.closest('.nav-dropdown').classList.toggle('open');
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer
+    onerror="document.querySelectorAll('[data-aos]').forEach(el=>el.style.opacity=1)"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js" defer></script>
+  <script>
+    window.addEventListener('load', () => { if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 }); });
+    document.addEventListener('DOMContentLoaded', function () {
+      const path = window.location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        if (link.getAttribute('href') === path) link.classList.add('active');
       });
+      const toggle = document.querySelector('.menu-toggle');
+      const links = document.querySelector('.nav-links');
+      if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+      // Mobile dropdown toggle
+      document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          btn.closest('.nav-dropdown').classList.toggle('open');
+        });
+      });
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+      });
+      const topBtn = document.querySelector('.back-to-top');
+      if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
     });
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
-    });
-    const topBtn = document.querySelector('.back-to-top');
-    if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
-  });
-</script>
+  </script>
 </body>
+
 </html>

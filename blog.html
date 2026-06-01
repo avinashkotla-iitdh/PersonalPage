@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blog — Avinash Kumar K. M.</title>
   <link href="style.css" rel="stylesheet" />
   <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
-  <meta name="description" content="Blog by Avinash Kumar K. M. — notes on 3D reconstruction, mesh processing, and research methods." />
+  <meta name="description"
+    content="Blog by Avinash Kumar K. M. — notes on 3D reconstruction, mesh processing, and research methods." />
   <meta name="robots" content="index, follow" />
   <meta property="og:title" content="Avinash Kumar K. M. — Research Portfolio" />
   <meta property="og:description" content="PhD Scholar at IIT Dharwad | 3D Modeling | Biomechanics | CAD | Research" />
@@ -15,107 +17,116 @@
   <meta property="og:url" content="https://avinashkm.netlify.app" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
+
 <body>
 
-<nav aria-label="Main navigation">
-  <span class="nav-brand">Avinash Kumar K. M.</span>
-  <button class="menu-toggle" aria-label="Toggle menu">☰</button>
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="research.html">Research</a>
-    <a href="publications.html">Publications</a>
-    <a href="experience.html">Experience</a>
-    <div class="nav-dropdown">
-      <button class="dropdown-toggle">Tools</button>
-      <div class="dropdown-menu">
-        <a href="viewer.html">🔬 3D Model Viewer</a>
-        <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+  <nav aria-label="Main navigation">
+    <span class="nav-brand">Avinash Kumar K. M.</span>
+    <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="publications.html">Publications</a>
+      <a href="experience.html">Experience</a>
+      <div class="nav-dropdown">
+        <button class="dropdown-toggle">Tools</button>
+        <div class="dropdown-menu">
+          <a href="viewer.html">🔬 3D Model Viewer</a>
+          <a href="pipeline.html">⚙️ Pipeline Walkthrough</a>
+        </div>
+      </div>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div data-aos="fade-up" style="margin-bottom:40px;">
+      <p class="label-mono">Notes & Thinking</p>
+      <h1 class="page-title">Blog</h1>
+      <p class="page-subtitle">Short-form writing on research methods, tools, and lessons from the lab.</p>
+    </div>
+
+    <div class="blog-list" data-aos="fade-up">
+
+      <!-- Placeholder post 1 — replace content when ready -->
+      <article class="blog-post">
+        <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
+        <h3>Why Mesh Smoothing is Harder Than It Looks</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Laplacian smoothing sounds simple. Add enough iterations
+          and you'll erase the very features you were trying to preserve. Notes on the spectral stopping criterion we
+          developed.</p>
+      </article>
+
+      <!-- Placeholder post 2 -->
+      <article class="blog-post">
+        <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
+        <h3>Accuracy metrics and which to use when</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Accuracy assessment is a tricky procedure, with the type of
+          metric chosen decides the final accuracy itself. The role alignment plays in computing the metrics and
+          registration of reconstructed surfaces preceeding the assessment is not studied enough.</p>
+      </article>
+
+      <!-- Placeholder post 3 -->
+      <article class="blog-post">
+        <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
+        <h3>From CT Scan to 3D Print: A Practical Pipeline</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Step-by-step notes on the tools, decisions, and failure
+          modes in converting a DICOM stack to a printable STL — with real examples from coronary artery and phantom
+          models.</p>
+      </article>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <p class="footer-name">Avinash Kumar K. M.</p>
+        <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
+        <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
+        <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
+        <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
       </div>
     </div>
-    <a href="blog.html">Blog</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="contact.html">Contact</a>
-  </div>
-</nav>
+    <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
+  </footer>
 
-<main class="container">
+  <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
 
-  <div data-aos="fade-up" style="margin-bottom:40px;">
-    <p class="label-mono">Notes & Thinking</p>
-    <h1 class="page-title">Blog</h1>
-    <p class="page-subtitle">Short-form writing on research methods, tools, and lessons from the lab.</p>
-  </div>
-
-  <div class="blog-list" data-aos="fade-up">
-
-    <!-- Placeholder post 1 — replace content when ready -->
-    <article class="blog-post">
-      <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
-      <h3>Why Mesh Smoothing is Harder Than It Looks</h3>
-      <p style="font-size:0.9rem;color:var(--text-muted);">Laplacian smoothing sounds simple. Add enough iterations and you'll erase the very features you were trying to preserve. Notes on the spectral stopping criterion we developed.</p>
-    </article>
-
-    <!-- Placeholder post 2 -->
-    <article class="blog-post">
-      <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
-      <h3>Marching Cubes: What the Textbooks Skip</h3>
-      <p style="font-size:0.9rem;color:var(--text-muted);">The algorithm is elegant. The error distribution of the output surface is not. A walkthrough of how voxel resolution shapes reconstruction accuracy — and why the generalised gamma fits better than you'd expect.</p>
-    </article>
-
-    <!-- Placeholder post 3 -->
-    <article class="blog-post">
-      <p class="label-mono" style="margin-bottom:6px;">Coming Soon</p>
-      <h3>From CT Scan to 3D Print: A Practical Pipeline</h3>
-      <p style="font-size:0.9rem;color:var(--text-muted);">Step-by-step notes on the tools, decisions, and failure modes in converting a DICOM stack to a printable STL — with real examples from coronary artery and phantom models.</p>
-    </article>
-
-  </div>
-
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <div>
-      <p class="footer-name">Avinash Kumar K. M.</p>
-      <p style="font-size:0.85rem;">PhD Scholar, IIT Dharwad · Dharwad, India</p>
-    </div>
-    <div class="footer-links">
-      <a href="mailto:avinash.kumar.20@iitdh.ac.in">Email</a>
-      <a href="https://www.researchgate.net/profile/Avinash-Kumar-K-M-2" target="_blank">ResearchGate</a>
-      <a href="https://in.linkedin.com/in/avinash-kumar-k-m-6b3624a1" target="_blank">LinkedIn</a>
-      <a href="pdfs/Avinash_KM_CV.pdf" target="_blank">CV</a>
-    </div>
-  </div>
-  <p class="footer-copy">© 2025 Avinash Kumar K. M. All rights reserved.</p>
-</footer>
-
-<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer onerror="document.querySelectorAll('[data-aos]').forEach(el=>el.style.opacity=1)"></script>
-<script>
-  window.addEventListener('load', () => { if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 }); });
-  document.addEventListener('DOMContentLoaded', function () {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      if (link.getAttribute('href') === path) link.classList.add('active');
-    });
-    const toggle = document.querySelector('.menu-toggle');
-    const links  = document.querySelector('.nav-links');
-    if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
-    // Mobile dropdown toggle
-    document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        btn.closest('.nav-dropdown').classList.toggle('open');
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer
+    onerror="document.querySelectorAll('[data-aos]').forEach(el=>el.style.opacity=1)"></script>
+  <script>
+    window.addEventListener('load', () => { if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 600 }); });
+    document.addEventListener('DOMContentLoaded', function () {
+      const path = window.location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        if (link.getAttribute('href') === path) link.classList.add('active');
       });
+      const toggle = document.querySelector('.menu-toggle');
+      const links = document.querySelector('.nav-links');
+      if (toggle && links) toggle.addEventListener('click', () => links.classList.toggle('active'));
+      // Mobile dropdown toggle
+      document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          btn.closest('.nav-dropdown').classList.toggle('open');
+        });
+      });
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+      });
+      const topBtn = document.querySelector('.back-to-top');
+      if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
     });
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
-    });
-    const topBtn = document.querySelector('.back-to-top');
-    if (topBtn) window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 120 ? 'flex' : 'none'; });
-  });
-</script>
+  </script>
 </body>
+
 </html>
